@@ -1,12 +1,14 @@
 from datetime import datetime
 import logging
 import os
+logging.info('start predict.py...')
 
 from urllib.request import urlopen
 from PIL import Image
 import tensorflow as tf
 import numpy as np
 
+from google.protobuf.json_format import MessageToJson
 
 scriptpath = os.path.abspath(__file__)
 scriptdir = os.path.dirname(scriptpath)
@@ -25,19 +27,26 @@ network_input_size = 0
 def _initialize():
     global labels, network_input_size
     if not labels:
+        logging.info('start _initialize...')
         # モデル
         with tf.io.gfile.GFile(filename, 'rb') as f:
             graph_def.ParseFromString(f.read())
             tf.import_graph_def(graph_def, name='')
+            #logging.info(graph_def)
+            # jsonに変換してファイルに出力してみる
+            json = MessageToJson(graph_def)
+            with open("model.pb.json", "w") as o:
+                o.write(json)
         # ラベル
         with open(labels_filename, 'rt') as lf:
             labels = [l.strip() for l in lf.readlines()]
-        # ???
+            logging.info(labels)
+        # 
         with tf.compat.v1.Session() as sess:
             input_tensor_shape = sess.graph.get_tensor_by_name('Placeholder:0').shape.as_list()
             network_input_size = input_tensor_shape[1]
             logging.info('network_input_size = ' + str(network_input_size))
-
+        logging.info('finish _initialize.')
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.now(),msg))
 
@@ -193,9 +202,14 @@ def _predict_image(image):
             predictions, = sess.run(prob_tensor, {input_node: [cropped_image] })
             logging.info("end sess.run")
 
+            # predictions に推論結果が配列で格納されます 
+            # ※ 例:[1.0000000e+00 3.6953815e-10] 猫、犬の順番で格納
+            logging.info(predictions)
+
             result = []
             highest_prediction = None
             for p, label in zip(predictions, labels):
+                logging.info("compare....")
                 truncated_probablity = np.float64(round(p,8))
                 if truncated_probablity > 1e-8:
                     prediction = {
@@ -203,6 +217,7 @@ def _predict_image(image):
                         'probability': truncated_probablity }
                     result.append(prediction)
                     if not highest_prediction or prediction['probability'] > highest_prediction['probability']:
+                        # 推論結果が最も高いデータを選択します
                         highest_prediction = prediction
 
             response = {
