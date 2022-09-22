@@ -1,9 +1,8 @@
 # azure で deep learning framework
 
-いくつか紹介したい。
+沢山ある中からいくつか調べておきたい。
 
 ## TensorFlow
-
+## Keras
 ## PyTorch
-
 ## Scikit-learn
