@@ -12,6 +12,7 @@
 ```
 python -m venv .venv
 source .venv/bin/activate
+#deactivate
 func init --worker-runtime python
 func new --name classify --template "HTTP trigger"
 ```
