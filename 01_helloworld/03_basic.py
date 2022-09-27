@@ -602,3 +602,268 @@ def say_something(word, *args):
 say_something('a','b','c', 'd', 'e')
 t = ('Mike', 'Nancy')
 say_something('a', *t)
+
+# キーワード引数の辞書化
+def menu(**kwarges):
+    print(kwarges)
+    # 辞書として扱える
+    for k, v in kwarges.items():
+        print(k,v)
+
+menu(entree='aaa', drink='bbbb')
+
+d = {
+    'aaa':'aaa',
+    'bbb':'bbb',
+    'ccc':'ccc'    
+}
+
+# 辞書として渡す、展開されて渡される
+menu(**d)
+
+def menu2(food, *args, **kwargs):
+    print(food)
+    print(args) # tuple
+    print(kwargs) # 辞書
+
+menu2('aaa', 'bbb', 'ccc', ddd='ddd', eee='eee')
+
+# Docstrings
+def test_func(param1, param2):
+    """ functionsの説明をここに書く
+    Args:
+        param1
+    Returns:
+        bool:
+    """
+    print(param1)
+    print(param2)
+    return True
+
+print(test_func.__doc__)
+#help(test_func)
+
+# 関数内関数 (inner func)
+def outer(a,b):
+    print(a,b)
+
+    #インナー関数として定義できる
+    def plus(c,d):
+        return c+d
+    
+    r = plus(a,b)
+    print(r)
+
+outer(2,3)
+
+
+# クロージャー
+def outer(a,b):
+    def inner():
+        return a + b
+    return inner # 関数を返す
+print(outer(1,2))
+f = outer(1,2) # 関数を戻り値として受け取る
+r = f() # 関数を実行
+print(r)
+
+def circle_area_func(pi):
+    def circle_area(r):
+        return pi * r * r
+    return circle_area
+
+cal1 = circle_area_func(3.14)
+cal2 = circle_area_func(3.141592)
+
+print(cal1(10))
+print(cal2(10))
+
+# デコレーター 関数をラップして共通処理を纏める
+def print_info(func): #デコレーター関数
+    def wrapper(*args, **kwargs):
+        print('start')
+        print('func_name:', func.__name__)
+        result = func(*args, **kwargs)
+        print('end')
+        return result
+    return wrapper # 関数を返す
+
+@print_info
+def add_num(a, b):
+    return a + b
+
+f = print_info(add_num)
+r = f(10, 20)
+print(r)
+
+# @でデコレーターを指定できる
+# 他の関数にも適用できる
+# 複数指定することもできる（順序に注意）
+@print_info
+def add_num2(a, b):
+    return a + b
+
+r = add_num2(5, 5)
+print(r)
+
+# ラムダ
+l = ['Mon', 'tue', 'Wed', 'Thu', 'Fri']
+
+def change_words(words, func):
+    print(func.__name__)
+    for word in words:
+        print(func(word))
+
+def sample_func(word):
+    return word.capitalize()
+
+sample_func2 = lambda word: word.capitalize()
+
+change_words(l, sample_func)
+change_words(l, sample_func2)
+change_words(l, lambda word: word.capitalize())
+
+# ジェネレーター yield と next の利用方法
+print('ジェネレーター')
+l = ['aaa','bbb','ccc']
+
+for i in l:
+    print(i)
+
+def test():
+    yield 'ddd'
+    yield 'eee'
+    yield 'fff'
+for t in test():
+    print(t)
+
+t = test()
+
+def counter(num=10):
+    for _ in range(num):
+        yield 'run'
+
+c = counter()
+
+
+print(next(t))
+print('@@@')
+print(next(c))
+print(next(c))
+print(next(c))
+print(next(t))
+print('@@@')
+print(next(c))
+print(next(c))
+print(next(c))
+print(next(t))
+#print(next(t)) #stopiteration これはエラーになる。
+
+
+# リスト内包表記
+t = (1,2,3,4,5)
+r = [ i for i in t]
+print(r)
+
+r2 = [ i for i in t if i % 2 == 0]
+print(r2)
+
+t2 = (5,6,7,8,9)
+
+r3 = []
+for i in t:
+    for j in t2:
+        print(i*j)
+        r3.append(i * j)
+print(r3)
+
+r4 = [i * j for i in t for j in t2]
+# あまりforを繰り返すと可読性が下がるので注意
+print(r4)
+
+# 集合(set)内包表記
+s = set()
+
+for i in range(10):
+    s.add(i)
+print(s)
+
+s = { i for i in range(10) if i % 2 == 0}
+print(s)
+
+# ジェネレーター内包表記
+def g():
+    for i in range(10):
+        yield i
+
+g = g()
+print(type(g))
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+
+g2 = (i for i in range(10)) # これの type は generator になる
+print(type(g2)) 
+print(next(g2))
+print(next(g2))
+print(next(g2))
+
+
+# 名前空間とスコープ
+animal = 'cat'
+print(animal)
+
+def f():
+    global animal    
+    print('global', animal)
+    # ローカル変数があると上のanimalがローカル変数を参照することになる
+    # animal = 'dog' 
+    # global
+
+    animal = 'dog'    
+    print('local', animal)
+
+    print('locals():', locals())
+    #print('locals():', globals())    
+
+    print(__name__)
+f()
+
+print(__name__)
+
+# 例外処理
+l = [1,2,3]
+i = 2
+
+#del l
+
+try:
+    l[i]
+except IndexError as ex:
+    print('index err {}'.format(ex))    
+except NameError as ex:
+    print('name error dont worrry')
+except Exception as ex: # すべてキャッチする
+    print('other error')
+else:
+    print('else done これは成功した場合のみ実行される')
+finally:
+    print('run finally errorでも必ず実行されます')
+print("end.")
+
+
+# 独自の例外処理
+class MyUppercaseError(Exception):
+    pass
+
+def check():
+    words = ['aaa', 'bbb']
+    raise MyUppercaseError('my message')
+
+try:
+    check()
+except MyUppercaseError as ex:
+    #独自の例外とわかるようにしましょう（分かりやすくなる）
+    print('this is my uppercase error')
+
