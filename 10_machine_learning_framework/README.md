@@ -44,8 +44,9 @@ Azure ML ワークスペース 作成
 RG_NAME=az-example-python
 LOCATION=japaneast
 WORKSPACE=ml-workspace-example
-#
+#リソースグループとMLワークスペースを作成
 az group create -n $RG_NAME -l $LOCATION
+#az group delete --name $RG_NAME -y
 az ml workspace create -n $WORKSPACE -g $RG_NAME -l $LOCATION
 ```
 
@@ -56,13 +57,10 @@ az ml workspace create -n $WORKSPACE -g $RG_NAME -l $LOCATION
 1. コンピューティング インスタンス (開発用に利用するコンピューター)
 2. コンピューティング クラスター
 
-## Notebook とは
+![image](./az-machine-learning.png)
 
-
-## ワークスペースの作成
-
-
-
+## Notebook とは (今回はこれを利用する)
+Jupyter Notebook　のこと。
 
 ## 3つの機械学習モデルの作成方法
 [Notebooks]
