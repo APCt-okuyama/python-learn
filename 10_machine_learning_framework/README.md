@@ -1,4 +1,4 @@
-# azure で deep learning framework
+# Azure で 機械学習 をはじめる
 
 沢山ある中からいくつか調べておきたい。
 
@@ -41,7 +41,7 @@ az extension add -n ml -y
 
 Azure ML ワークスペース 作成
 ```
-RG_NAME=az-example-python
+RG_NAME=az-ml-example01
 LOCATION=japaneast
 WORKSPACE=ml-workspace-example
 #リソースグループとMLワークスペースを作成
@@ -62,7 +62,7 @@ az ml workspace create -n $WORKSPACE -g $RG_NAME -l $LOCATION
 ## Notebook とは (今回はこれを利用する)
 Jupyter Notebook　のこと。
 
-## 3つの機械学習モデルの作成方法
+## 機械学習モデルの作成方法 (3つ)
 [Notebooks]
 [自動 ML]
 [デザイナー]
