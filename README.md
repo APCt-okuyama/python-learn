@@ -4,10 +4,37 @@
 機械学習関連  
 Azureへのデプロイなどなど  
 
-## version
+## install (ubuntu)
 
+pyenvが必要とするモジュールをインストール
+```
+sudo apt install \
+  build-essential libssl-dev zlib1g-dev \
+  libbz2-dev libreadline-dev libsqlite3-dev curl llvm \
+  libncursesw5-dev tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
+  libopencv-dev git
 ```
 
+pyenv をインストール  
+(https://github.com/pyenv/pyenv#getting-pyenv)  
+```
+Automatic installer
+curl https://pyenv.run | bash
+```
+※パスを通す
+
+python 3.9.11 を install して 利用する
+```
+pyenv install 3.9.11
+#pyenv local 3.9.11
+pyenv global 3.9.11
+python -VV
+Python 3.9.11 (main, Dec 14 2022, 13:46:15) 
+[GCC 9.4.0]
+```
+
+## version
+```
 python -VV
 Python 3.9.11 (main, Jun 27 2022, 09:49:05)
 [GCC 9.4.0]
